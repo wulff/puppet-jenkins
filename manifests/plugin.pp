@@ -61,4 +61,13 @@ define jenkins::plugin(
     notify  => Service['jenkins'],
     require => [Package['jenkins'], File[$plugin_dir]],
   }
+
+  if defined(Jenkins::Plugin['seleniumhq']) {
+    file { '/var/lib/jenkins/hudson.plugins.seleniumhq.SeleniumhqBuilder.xml':
+      source  => 'puppet:///modules/jenkins/config.selenium.xml',
+      owner   => $jenkins_user_real,
+      group   => $jenkins_group_real,
+      require => Package['jenkins'],
+    }
+  }
 }
