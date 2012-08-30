@@ -35,13 +35,15 @@ class jenkins(
     default => $jenkins_group,
   }
 
-  apt::source { 'jenkins':
-    location    => 'http://pkg.jenkins-ci.org/debian',
-    release     => '',
-    repos       => 'binary/',
-    key         => 'D50582E6',
-    key_server  => 'http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key',
-    include_src => false,
+  if ! defined(Apt::Source['jenkins']) {
+    apt::source { 'jenkins':
+      location    => 'http://pkg.jenkins-ci.org/debian',
+      release     => '',
+      repos       => 'binary/',
+      key         => 'D50582E6',
+      key_server  => 'http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key',
+      include_src => false,
+    }
   }
 
   package { 'jenkins':
@@ -52,14 +54,6 @@ class jenkins(
   service { 'jenkins':
     ensure  => running,
     enable  => true,
-    require => Package['jenkins'],
-  }
-
-  # FIXME: move this to nodes.pp? not jenkins-specific...
-  file { '/var/lib/jenkins/hudson.plugins.seleniumhq.SeleniumhqBuilder.xml':
-    source  => 'puppet:///modules/jenkins/config.selenium.xml',
-    owner   => $jenkins_user_real,
-    group   => $jenkins_group_real,
     require => Package['jenkins'],
   }
 }
