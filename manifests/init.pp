@@ -21,6 +21,7 @@
 class jenkins(
   $jenkins_user  = 'UNSET',
   $jenkins_group = 'UNSET',
+  $jenkins_mail  = 'jenkins@example.com',
   $version       = present
 ) {
   include jenkins::params
@@ -55,5 +56,11 @@ class jenkins(
     ensure  => running,
     enable  => true,
     require => Package['jenkins'],
+  }
+
+  file { '/var/lib/jenkins/.gitconfig':
+    content => template('jenkins/gitconfig.erb'),
+    owner   => $jenkins_user_real,
+    group   => $jenkins_group_real,
   }
 }
