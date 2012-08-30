@@ -62,7 +62,7 @@ define jenkins::plugin(
     require => [Package['jenkins'], File[$plugin_dir]],
   }
 
-  if defined(Jenkins::Plugin['seleniumhq']) {
+  if $plugin_name == 'seleniumhq' {
     file { '/var/lib/jenkins/hudson.plugins.seleniumhq.SeleniumhqBuilder.xml':
       source  => 'puppet:///modules/jenkins/config.selenium.xml',
       owner   => $jenkins_user_real,
