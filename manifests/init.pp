@@ -62,5 +62,6 @@ class jenkins(
     content => template('jenkins/gitconfig.erb'),
     owner   => $jenkins_user_real,
     group   => $jenkins_group_real,
+    require => Package['jenkins'],
   }
 }

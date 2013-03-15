@@ -22,11 +22,17 @@
 define jenkins::job(
   $job_name      = $title,
   $repository    = 'UNSET',
+  $branch        = 'UNSET',
   $jenkins_user  = 'UNSET',
   $jenkins_group = 'UNSET'
 ) {
   if $repository == 'UNSET' {
     fail('repository parameter is required')
+  }
+
+  $jenkins_branch_real = $branch ? {
+    'UNSET' => '',
+    default => "-b $branch",
   }
 
   $jenkins_user_real = $jenkins_user ? {
@@ -40,7 +46,7 @@ define jenkins::job(
   }
 
   exec { "jenkins-job-${job_name}":
-    command => "git clone ${repository} ${job_name} && chown -R ${jenkins_user_real}:${jenkins_group_real} ${job_name}",
+    command => "git clone ${jenkins_branch_real} ${repository} ${job_name} && chown -R ${jenkins_user_real}:${jenkins_group_real} ${job_name}",
     cwd     => '/var/lib/jenkins/jobs',
     creates => "/var/lib/jenkins/jobs/${job_name}",
     require => Package['jenkins'],

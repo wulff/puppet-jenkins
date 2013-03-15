@@ -48,7 +48,7 @@ define jenkins::plugin(
     file { [$plugin_parent_dir, $plugin_dir]:
       ensure  => directory,
       owner   => $jenkins_user_real,
-      group   => $jenkins_user_group,
+      group   => $jenkins_group_real,
       require => Package['jenkins'],
     }
   }
