@@ -27,8 +27,7 @@
       <launcher class="hudson.plugins.sshslaves.SSHLauncher" plugin="ssh-slaves@0.22">
         <host><%= slave['host'] %></host>
         <port><%= slave['port'] %></port>
-        <username><%= slave['username'] %></username>
-        <privatekey><%= slave['privatekey'] %></privatekey>
+        <credentialsId>4b4d14e8-65d5-463a-960c-ddaf1f2523ff</credentialsId>
       </launcher>
       <label><%= slave['labels'] %></label>
       <nodeProperties/>
